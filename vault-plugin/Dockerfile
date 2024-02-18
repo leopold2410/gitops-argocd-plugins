@@ -13,8 +13,10 @@ RUN wget -O argocd-vault-plugin_${ARGOCD_VAULT_PLUGIN_VERSION}_linux_amd64 https
 RUN wget -O avp-checksum.txt https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${ARGOCD_VAULT_PLUGIN_VERSION}/argocd-vault-plugin_${ARGOCD_VAULT_PLUGIN_VERSION}_checksums.txt
 RUN sha256sum -c --ignore-missing avp-checksum.txt
 
+FROM debian:${DEBIAN_RELEASE}-slim
+
 RUN mkdir -p /plugins
-RUN cp -a /downloads/argocd-vault-plugin_${ARGOCD_VAULT_PLUGIN_VERSION}_linux_amd64 /plugins/argocd-vault-plugin
+COPY --from=builder /downloads/argocd-vault-plugin_${ARGOCD_VAULT_PLUGIN_VERSION}_linux_amd64 /plugins/argocd-vault-plugin
 RUN chmod a+x /plugins/*
 
 CMD [“sh”, “-c”, “cp -rv /plugins/* /custom-tools/”]
