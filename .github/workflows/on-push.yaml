@@ -46,3 +46,9 @@ jobs:
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
+
+      - name: Archive scanning results
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: trivy-results.sarif
